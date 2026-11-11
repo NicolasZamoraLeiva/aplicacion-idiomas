@@ -1,0 +1,48 @@
+{{define "shell"}}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}} · {{t "app.name"}}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/hyperscript.min.js"></script>
+</head>
+<body>
+  <div class="layout">
+    {{template "sidebar" .}}
+    <div class="main">
+      <header class="top">
+        <p class="eyebrow">{{t "app.eyebrow"}}</p>
+        <h1>{{.Title}}</h1>
+      </header>
+      <main id="stage">
+        {{template "stage" .}}
+      </main>
+      <footer><p>{{t "about.tatoeba"}}</p></footer>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}
+
+{{define "sidebar"}}
+<aside class="sidebar">
+  <a class="brand" href="/activities/translate">{{t "app.name"}}</a>
+  <p class="side-label">{{t "nav.activities"}}</p>
+  <ul class="activities">
+    {{range .Activities}}
+    <li><a href="/activities/{{.ID}}" {{if eq .ID $.CurrentActivity}}aria-current="page"{{end}}>{{.Name}}</a></li>
+    {{end}}
+  </ul>
+  <a class="settings-link" href="/settings" {{if .SettingsActive}}aria-current="page"{{end}}>{{t "nav.settings"}}</a>
+</aside>
+{{end}}
+
+{{define "stage"}}
+  {{if eq .Kind "play"}}{{template "play" .}}{{end}}
+  {{if eq .Kind "settings"}}{{template "settings" .}}{{end}}
+  {{if eq .Kind "summary"}}{{template "summary" .}}{{end}}
+  {{if eq .Kind "empty"}}{{template "empty" .}}{{end}}
+  {{if eq .Kind "message"}}{{template "message" .}}{{end}}
+{{end}}

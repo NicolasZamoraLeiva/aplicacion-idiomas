@@ -1,0 +1,6 @@
+/data/
+/.gotmp/
+*.exe
+*.db
+*.db-wal
+*.db-shm

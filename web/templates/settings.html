@@ -1,0 +1,28 @@
+{{define "settings"}}
+<section class="panel">
+  <p>{{t "settings.intro"}}</p>
+  {{if .Saved}}<p class="notice" role="status">{{t "settings.saved"}}</p>{{end}}
+  {{if .Error}}<p class="error" role="alert">{{.Error}}</p>{{end}}
+  <form method="post" action="/settings" class="settings">
+    {{range .Fields}}
+    <label class="field">
+      <span>{{.Label}}</span>
+      {{if eq .Kind "select"}}
+      <select name="{{.Key}}">
+        {{range .Options}}
+        <option value="{{.Value}}" {{if .Selected}}selected{{end}}>{{.Label}}</option>
+        {{end}}
+      </select>
+      {{else}}
+      <input type="number" name="{{.Key}}" value="{{.Value}}" min="{{.Min}}" max="{{.Max}}" step="1" required>
+      {{end}}
+      {{if .Help}}<small>{{.Help}}</small>{{end}}
+    </label>
+    {{end}}
+    <button type="submit">{{t "settings.save"}}</button>
+  </form>
+  <h2>{{t "settings.about"}}</h2>
+  <p>{{t "about.tatoeba"}}</p>
+  <p>{{t "empty.command_note"}}</p>
+</section>
+{{end}}

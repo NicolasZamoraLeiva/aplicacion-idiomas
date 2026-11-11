@@ -1,0 +1,35 @@
+{{define "summary"}}
+<section class="panel">
+  {{if .ShowScore}}
+  <p class="score">{{.Total}} / {{.Max}}</p>
+  <p class="percent">{{.Percent}}%</p>
+  {{else}}
+  <p>{{t "summary.instant"}}</p>
+  {{end}}
+  {{if .Rows}}
+  <table>
+    <thead>
+      <tr>
+        <th>{{t "summary.row_prompt"}}</th>
+        <th>{{t "summary.row_given"}}</th>
+        <th>{{t "summary.row_outcome"}}</th>
+        <th>{{t "summary.row_points"}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Rows}}
+      <tr>
+        <td lang="und">{{.Prompt}}</td>
+        <td>{{.Given}}</td>
+        <td>{{.Outcome}}</td>
+        <td>{{.Points}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{else}}
+  <p>{{t "summary.empty"}}</p>
+  {{end}}
+  <p class="actions"><a class="button" href="/activities/translate">{{t "summary.back"}}</a></p>
+</section>
+{{end}}

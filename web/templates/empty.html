@@ -1,0 +1,16 @@
+{{define "empty"}}
+<section class="panel">
+  <h2>{{t "empty.title"}}</h2>
+  <p>{{t "empty.body"}}</p>
+  <pre class="command">{{.ImportCommand}}</pre>
+  <p>{{t "empty.command_note"}}</p>
+</section>
+{{end}}
+
+{{define "message"}}
+<section class="panel">
+  <h2>{{.MessageTitle}}</h2>
+  <p>{{.Message}}</p>
+  {{if .MessageLink}}<p class="actions"><a class="button" href="{{.MessageLink}}">{{.MessageLinkLabel}}</a></p>{{end}}
+</section>
+{{end}}

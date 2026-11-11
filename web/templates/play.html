@@ -1,0 +1,60 @@
+{{define "play"}}
+{{if .HasResult}}
+<section class="result result-{{.Outcome}}" role="status">
+  <p class="outcome">{{.OutcomeLabel}}</p>
+  <p>{{t "result.given"}} <strong>{{.Given}}</strong></p>
+  <p>{{t "result.accepted"}}</p>
+  <ul class="accepted">
+    {{range .Accepted}}<li lang="{{$.ResultBCP47}}">{{.}}</li>{{end}}
+  </ul>
+  {{if .ShowScore}}
+  <p>{{t "result.points"}} <strong>{{.Points}}</strong></p>
+  <p>{{.Progress}}</p>
+  {{end}}
+</section>
+{{end}}
+{{if .Finished}}
+<section class="panel score-panel">
+  <h2>{{t "summary.title"}}</h2>
+  <p class="score">{{.Total}} / {{.Max}}</p>
+  <p class="percent">{{.Percent}}%</p>
+  <p class="actions">
+    <a class="button" href="/sessions/{{.SessionID}}">{{t "summary.details"}}</a>
+    <a class="button button-secondary" href="/activities/translate">{{t "summary.again"}}</a>
+  </p>
+</section>
+{{else if .HasPrompt}}
+<section class="prompt">
+  <p class="instruction">{{.Instruction}}</p>
+  {{if .PromptProgress}}<p class="progress">{{.PromptProgress}}</p>{{end}}
+  <p class="word" lang="{{.PromptBCP47}}">{{.Word}}</p>
+  <form method="post" action="/activities/translate/answer" _="on submit
+    halt the event
+    js(me)
+      return new URLSearchParams(new FormData(me)).toString()
+    end
+    set payload to it
+    fetch /activities/translate/answer?fragment=1 with method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:payload
+    set #stage.innerHTML to it
+    _hyperscript.processNode(#stage)">
+    <input type="hidden" name="session_id" value="{{.SessionID}}">
+    <input type="hidden" name="item_id" value="{{.ItemID}}">
+    {{if eq .Input "choice"}}
+    <fieldset>
+      <legend class="visually-hidden">{{t "prompt.choose"}}</legend>
+      {{range .Choices}}
+      <label class="choice">
+        <input type="radio" name="answer" value="{{.Value}}" required>
+        <span lang="{{$.AnswerBCP47}}">{{.Label}}</span>
+      </label>
+      {{end}}
+    </fieldset>
+    {{else}}
+    <label class="type-label" for="answer">{{t "prompt.type"}}</label>
+    <input id="answer" name="answer" type="text" lang="{{.AnswerBCP47}}" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+    {{end}}
+    <button type="submit">{{t "prompt.submit"}}</button>
+  </form>
+</section>
+{{end}}
+{{end}}
